@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id                Int            @id @default(autoincrement())
+  email             String         @db.VarChar(258)
+  name              String         @db.VarChar(258)
+  password          String         @db.VarChar(258)
+  phone             String         @db.VarChar(258)
+  type              String         @db.VarChar(258)
+  Status            Boolean
+  location          String
+  Approved          Boolean
+
+  rentOwner         rent[]
+  ownedbooks        book[]
+  bookUploads       bookupload[]
+}
+
+
+model choice {
+  id                   Int            @id @default(autoincrement())
+  type                 String         @db.VarChar(50)
+  label                String
+  value                String
+}
+
+model book {
+  id                Int               @id @default(autoincrement())
+  name              String
+  author            String
+  category          Int
+  owner_id          Int
+
+  owner             user              @relation(fields: [owner_id], references: [id])
+  bookUploads       bookupload[]
+}
+
+model bookupload {
+  id                Int               @id @default(autoincrement())
+  quantity           Int
+  book_id            Int
+  price              Float
+  status             Boolean
+  owner_id           Int
+
+  owner              user             @relation(fields: [owner_id], references: [id])
+  book               book             @relation(fields: [book_id], references: [id])
+  rent               rent[]
+  questionaries      questionary[]
+}
+
+model questionary {
+  id                Int               @id @default(autoincrement())
+  question          String
+  name              String
+  type              String
+  upload_id         Int
+
+  bookUploads       bookupload        @relation(fields: [upload_id], references: [id])
+}
+
+model questionanswer {
+  id                Int               @id @default(autoincrement())
+  question          String
+  name              String
+  type              String
+  answer            String
+  rent_id           Int
+
+  rent              rent              @relation("rent_question", fields: [rent_id], references: [id])
+}
+
+model rent {
+  id                Int               @id @default(autoincrement())
+  upload_id         Int
+  quantity          Int
+  status            String
+  date              DateTime
+  owner_id          Int
+  total_price       Float
+
+  owner             user              @relation(fields: [owner_id], references: [id])
+  bookUploads       bookupload        @relation(fields: [upload_id], references: [id])
+  additionalAnswer  questionanswer[]  @relation("rent_question")
+}

@@ -1,0 +1,7 @@
+/node_modules
+/application/uploads
+/prisma/migrations
+/package-lock.json
+/attachments
+/*.crt
+/*.key
