@@ -1,11 +1,9 @@
 const FieldsMapper = require("../../infrastructure/FieldMapper");
-const UserValidator = require("./UserValidator");
 
 module.exports = async function (reqUser, data, dependencies, smsService) {
     try {
 
         // let validated = await dependencies.routingValidator.validateRecord("user", data);
-        let validated = UserValidator.create.parse(data);
         // if (validated) {
 
             
