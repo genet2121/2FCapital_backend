@@ -4,11 +4,10 @@ module.exports = async function (reqUser, input, dependencies, smsService) {
 
     try {
 
-        let validated = await dependencies.routingValidator.validatOnUpdateRecord("book", input);
-
+        let validated = await dependencies.routingValidator.validatOnUpdateRecord("choice", input);
         if (validated) {
 
-            const foundRecord = await dependencies.databasePrisma.book.findFirst({
+            const foundRecord = await dependencies.databasePrisma.choice.findFirst({
                 where: {
                     id: input.id
                 }
@@ -18,9 +17,8 @@ module.exports = async function (reqUser, input, dependencies, smsService) {
                 throw dependencies.exceptionHandling.throwError("record not found.", 404);
             }
 
-            const recordData = FieldsMapper.mapFields(input, "book");
-
-            return await dependencies.databasePrisma.user.update({
+            const recordData = FieldsMapper.mapFields(input, "choice");
+            return await dependencies.databasePrisma.choice.update({
                 where: {
                     id: input.id
                 },

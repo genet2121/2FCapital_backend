@@ -153,13 +153,13 @@ module.exports = class Crud {
 
             try {
 
-                let { table, data } = req.body;
+                let { tableName, data } = req.body;
 
-                if (!table || !data) {
+                if (!tableName || !data) {
                     throw this.dependencies.exceptionHandling.throwError("table and data are required in the request body", 400);
                 }
 
-                let model = await prisma.Prisma.ModelName[table];
+                let model = await prisma.Prisma.ModelName[tableName];
 
                 if (!model) {
                     console.log("table not found");
@@ -170,7 +170,7 @@ module.exports = class Crud {
                     throw this.dependencies.exceptionHandling.throwError("request body must at least have an Id", 400);
                 }
 
-                let record = await controllers[table].update(req.user, data, this.dependencies, this.smsService);
+                let record = await controllers[tableName].update(req.user, data, this.dependencies, this.smsService);
 
                 return res.status(200).json(record);
 
@@ -189,32 +189,30 @@ module.exports = class Crud {
 
             try {
 
-                let { data } = req.body;
-               
-                if (!data) {
-                    throw this.dependencies.exceptionHandling.throwError("requestBody must contain data object", 400);
-                }
+                let { oldPassword, newPassword, id } = req.body;
 
-                if (!data.id) {
+                if (!id) {
                    throw this.dependencies.exceptionHandling.throwError("data object must contain 'id' property", 400);
                 }
-                if (!data.oldPassword) {
+                if (!oldPassword) {
                     throw this.dependencies.exceptionHandling.throwError("data object must contain 'oldPassword' property", 400);
                 }
-                if (!data.newPassword) {
+                if (!newPassword) {
                     throw this.dependencies.exceptionHandling.throwError("data object must contain 'newPassword' property", 400);
                 }
 
-                let record = await ChangePassword(req.user, parseInt(data.id), data.oldPassword, data.newPassword, this.dependencies);
+                let record = await ChangePassword(req.user, parseInt(id), oldPassword, newPassword, this.dependencies);
                 return res.status(200).json(record);
 
             } catch (error) {
+
                 console.log(error);
                 if(error.statusCode){
                     return res.status(error.statusCode).json({ message: error.message })
                 } else {
                     return res.status(500).json({ message: "Internal Server Error" })
                 }
+
             }
 
         });
@@ -222,24 +220,20 @@ module.exports = class Crud {
         this.router.post("/delete", async (req, res, next) => {
             try {
 
-                let { table, data } = req.body;
+                let { tableName, id } = req.body;
 
-                if(!data || !table){
+                if(!id || !tableName) {
                     console.log("request body must have a data and table properties");
                     throw this.dependencies.exceptionHandling.throwError("request body must have a data and table properties", 400);
                 }
 
-                if(!data.id){
-                    throw this.dependencies.exceptionHandling.throwError("request body must atleast have an Id", 400);
-                }
-
-                let model = await prisma.Prisma.ModelName[table];
+                let model = await prisma.Prisma.ModelName[tableName];
 
                 if (!model) {
                     throw this.dependencies.exceptionHandling.throwError("table not found", 404);
                 }
 
-                let record = await controllers[table].delete(Array.isArray(data.id) ? data.id : [data.id]);
+                let record = await controllers[tableName].delete(req.user, (Array.isArray(id) ? id : [id]), this.dependencies, this.smsService);
 
                 return res.status(200).json({
                     status: 200,

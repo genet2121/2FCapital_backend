@@ -14,9 +14,9 @@ model user {
   password          String         @db.VarChar(258)
   phone             String         @db.VarChar(258)
   type              String         @db.VarChar(258)
-  Status            Boolean
+  Status            ACTIVE         @default(false)
   location          String
-  Approved          Boolean
+  Approved          ACTIVE
 
   rentOwner         rent[]
   ownedbooks        book[]
@@ -35,7 +35,7 @@ model book {
   id                Int               @id @default(autoincrement())
   name              String
   author            String
-  category          Int
+  category          String
   owner_id          Int
 
   owner             user              @relation(fields: [owner_id], references: [id])
@@ -89,4 +89,9 @@ model rent {
   owner             user              @relation(fields: [owner_id], references: [id])
   bookUploads       bookupload        @relation(fields: [upload_id], references: [id])
   additionalAnswer  questionanswer[]  @relation("rent_question")
+}
+
+enum ACTIVE {
+  true
+  false
 }

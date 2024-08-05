@@ -31,7 +31,16 @@ module.exports = class AuthController {
             } else {
 
                 let role = [user.type]
-                const payload = { FullName: user.FullName, Email: user.Email, Id: user.id, Roles: role, Phone: user.Phone };
+                const payload = {
+                    FullName: user.name,
+                    Email: user.email,
+                    Id: user.id,
+                    Roles: role,
+                    Phone: user.phone,
+                    Approved: user.Approved,
+                    Location: user.location,
+                    Status: user.Status
+                };
 
                 // if(user.type == "company") {
 

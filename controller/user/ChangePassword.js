@@ -2,29 +2,34 @@ module.exports = async function (reqUser, id, oldPassword, newPassword, dependen
 
     try {
 
-        let user = await this.getUser(id);
+        let user = await dependencies.databasePrisma.user.findFirst({
+            where: {
+                id: id
+            }
+        });
+
         if (!user) {
             throw dependencies.exceptionHandling.throwError("User Not Found", 404);
-        } 
-        if(reqUser.Roles.includes("admin") || user.id == reqUser.Id){
+        }
 
-            if (!await dependencies.encryption.compare(oldPassword, user.Password)) {
+        if(!reqUser || reqUser.Roles.includes("admin") || user.id == reqUser.Id){
+
+            if (!await dependencies.encryption.compare(oldPassword, user.password)) {
                 throw dependencies.exceptionHandling.throwError("Incorrect old password", 401); 
-            }else{
+            } else {
 
-                user.Password = await dependencies.encryption.hash(newPassword)
+                user.password = await dependencies.encryption.hash(newPassword)
 
                 return await dependencies.databasePrisma.user.update({
                     where: {
                         id: id
                     },
                     data: {
-                        Password: user.Password
+                        password: user.password
                     },
                 });
 
             }
-
 
         }else{
             throw dependencies.exceptionHandling.throwError("Unauthorized Access! Only the admin and the user owning the record can change a password.", 401); 

@@ -1,16 +1,16 @@
 module.exports = async function (reqUser, id, dependencies, smsService, type) {
     try {
 
-        const book = await dependencies.databasePrisma.book.findUnique({
+        const user = await dependencies.databasePrisma.choice.findUnique({
             where: {
                 id: Number(id)
             }
         })
 
-        if (!book) {
-            throw dependencies.exceptionHandling.throwError("No user exist with the given id", 404);
+        if (!user) {
+            throw dependencies.exceptionHandling.throwError("No choice exist with the given id", 404);
         }
-        return book;
+        return user;
     } catch (error) {
         console.log(error);
         if(error.statusCode){

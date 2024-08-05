@@ -1,9 +1,8 @@
-module.exports = (schema, data) => {
+function ZodValidation (schema, data, dependencies) {
 
     let validated = schema.safeParse(data);
     if(!validated.success) {
 
-        // console.log("validation result ", validated.error.issues);
         let error_messages = [];
         validated.error.issues.forEach(issue => {
             error_messages.push(`${issue.path[0]}: ${issue.message}`);
@@ -13,4 +12,8 @@ module.exports = (schema, data) => {
 
     }
 
+    return true;
+
 }
+
+module.exports = ZodValidation;

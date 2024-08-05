@@ -9,6 +9,8 @@ const UpdateAttachment = require("./attachment/UpdateAttachment");
 const ListAttachment = require("./attachment/ListAttachment");
 const getAttachment = require("./attachment/GetAttachment");
 const DeleteAttachment = require("./attachment/DeleteAttachment");
+const CreateBook = require("./book/CreateBook");
+const CreateChoice = require("./choice/CreateChoice");
 
 
 module.exports = function (dependencies) {
@@ -20,6 +22,12 @@ module.exports = function (dependencies) {
             delete: DeleteUser,
             get: GetUser,
             getList: ListUser
+        },
+        book: {
+            create: CreateBook,
+        },
+        choice: {
+            create: CreateChoice,
         },
         attachment: {
             create: CreateAttachment,

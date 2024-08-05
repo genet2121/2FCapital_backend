@@ -56,6 +56,48 @@
 			}
 		}
 	},
+	"book": {
+		"fields": {
+			"name": {
+				"type": "string",
+				"minLength": 3,
+				"required": true
+			},
+			"author": {
+				"type": "string",
+				"minLength": 3,
+				"required": true
+			},
+			"category": {
+				"type": "string",
+				"minValue": 3,
+				"required": true
+			},
+			"owner_id": {
+				"type": "number",
+				"required": true
+			}
+		}
+	},
+	"choice": {
+		"fields": {
+			"type": {
+				"type": "string",
+				"minLength": 3,
+				"required": true
+			},
+			"label": {
+				"type": "string",
+				"minLength": 3,
+				"required": true
+			},
+			"value": {
+				"type": "string",
+				"minValue": 3,
+				"required": true
+			}
+		}
+	},
 	"attachment": {
 		"fields": {
 			"name": {

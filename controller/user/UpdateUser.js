@@ -1,10 +1,13 @@
 const FieldsMapper = require("../../infrastructure/FieldMapper");
+const ZodValidation = require("../../infrastructure/service/validation/zodValidation");
+const UserValidator = require("./UserValidator");
 
 module.exports = async function (reqUser, input, dependencies, smsService) {
 
     try {
 
-        let validated = await dependencies.routingValidator.validatOnUpdateRecord("user", input);
+        let validated = ZodValidation(UserValidator.create, input, dependencies);
+        // let validated = await dependencies.routingValidator.validatOnUpdateRecord("user", input);
 
         if (validated) {
 
@@ -14,10 +17,9 @@ module.exports = async function (reqUser, input, dependencies, smsService) {
                 }
             });
 
-            if(foundUser){
-                if (reqUser.Roles.includes("admin") || foundUser.id == reqUser.id) {
+            if(foundUser) {
+                if (!reqUser || reqUser.Roles.includes("admin") || foundUser.id == reqUser.id) {
                     if (input.password) {
-
                         input.password = await dependencies.encryption.hash(input.password);
                     }
 
@@ -37,9 +39,7 @@ module.exports = async function (reqUser, input, dependencies, smsService) {
                 throw dependencies.exceptionHandling.throwError("record not found.", 404);
             }
 
-
         }
-
 
     } catch (error) {
         console.log(error);

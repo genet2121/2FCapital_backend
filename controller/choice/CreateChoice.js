@@ -1,28 +1,27 @@
 const FieldsMapper = require("../../infrastructure/FieldMapper");
-const ZodValidation = require("../../infrastructure/service/validation/zodValidation");
-const BookValidator = require("./BookValidator");
 
 module.exports = async function (reqUser, data, dependencies, smsService) {
+
     try {
 
         // let validated = await dependencies.routingValidator.validateRecord("user", data);
         let validated = ZodValidation(BookValidator.create, data, dependencies);
         if (validated) {
 
-            const bookData = FieldsMapper.mapFields(data, "book");
+            const choiceData = FieldsMapper.mapFields(data, "choice");
 
-            let book = await dependencies.databasePrisma.book.create({
-                data: bookData
+            let choice = await dependencies.databasePrisma.choice.create({
+                data: choiceData
             });
 
             // await this.smsService.sendSMS(user.Phone, `Dear ${user.FullName} user your phone number to sign in to your account and the account password is ${password}. Thank you for working with us!`);
 
-            return book;
+            return choice;
 
         }
 
-    }
-    catch (error) {
+    } catch (error) {
+
         console.log(error);
 
         if(error.statusCode){
@@ -30,5 +29,6 @@ module.exports = async function (reqUser, data, dependencies, smsService) {
         }else{
             throw dependencies.exceptionHandling.throwError("Internal Server Error", 500);
         }
+
     }
 }
