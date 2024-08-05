@@ -1,10 +1,13 @@
 const FieldsMapper = require("../../infrastructure/FieldMapper");
+const ZodValidation = require("../../infrastructure/service/validation/zodValidation");
+const ChoiceValidator = require("./ChoiceValidator");
 
 module.exports = async function (reqUser, input, dependencies, smsService) {
 
     try {
 
-        let validated = await dependencies.routingValidator.validatOnUpdateRecord("choice", input);
+        // let validated = await dependencies.routingValidator.validatOnUpdateRecord("choice", input);
+        let validated = ZodValidation(ChoiceValidator.create, input, dependencies);
         if (validated) {
 
             const foundRecord = await dependencies.databasePrisma.choice.findFirst({

@@ -8,7 +8,6 @@ module.exports = async function (reqUser, input, dependencies, smsService) {
 
         let validated = ZodValidation(UserValidator.create, input, dependencies);
         // let validated = await dependencies.routingValidator.validatOnUpdateRecord("user", input);
-
         if (validated) {
 
             const foundUser = await dependencies.databasePrisma.user.findFirst({
