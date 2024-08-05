@@ -5,7 +5,17 @@ module.exports = async function (reqUser, data, dependencies, smsService) {
     try {
 
         // let validated = await dependencies.routingValidator.validateRecord("user", data);
-        let validated = UserValidator.create.parse(data);
+        let validated = UserValidator.create.safeParse(data);
+        if(!validated.success) {
+            // console.log("validation result ", validated.error.issues);
+            let error_messages = [];
+            validated.error.issues.forEach(issue => {
+                error_messages.push(`${issue.path[0]}: ${issue.message}`);
+            });
+
+            throw dependencies.exceptionHandling.throwError(error_messages.join(", "), 500);
+
+        }
         // if (validated) {
 
             
