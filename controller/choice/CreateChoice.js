@@ -1,11 +1,13 @@
 const FieldsMapper = require("../../infrastructure/FieldMapper");
+const ZodValidation = require("../../infrastructure/service/validation/zodValidation");
+const ChoiceValidator = require("./ChoiceValidator");
 
 module.exports = async function (reqUser, data, dependencies, smsService) {
 
     try {
 
         // let validated = await dependencies.routingValidator.validateRecord("user", data);
-        let validated = ZodValidation(BookValidator.create, data, dependencies);
+        let validated = ZodValidation( ChoiceValidator.create, data, dependencies);
         if (validated) {
 
             const choiceData = FieldsMapper.mapFields(data, "choice");

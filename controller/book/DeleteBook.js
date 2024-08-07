@@ -3,17 +3,21 @@ module.exports = async function (reqUser, id, dependencies, smsService) {
     try {
 
         const bookFound = await dependencies.databasePrisma.book.findFirst({
-            where: { id: id }
+            where: { id: { in: id } }
         });
+
         if (!bookFound) {
-            throw dependencies.exceptionHandling.throwError("user with " + id + " id does not exist", 404);
+            throw dependencies.exceptionHandling.throwError("user with " + id.join(", ") + " id does not exist", 404);
         }
-        const book = await dependencies.databasePrisma.book.delete({
+
+        const book = await dependencies.databasePrisma.book.deleteMany({
             where: { id: { in: id } }
         });
 
         return book;
+
     } catch (error) {
+
         console.log(error);
 
         if(error.statusCode){
@@ -21,6 +25,7 @@ module.exports = async function (reqUser, id, dependencies, smsService) {
         }else{
             throw dependencies.exceptionHandling.throwError("Internal Server Error", 500);
         }
+
     }
 
 }

@@ -3,14 +3,14 @@ module.exports = async function (reqUser, id, dependencies, smsService) {
     try {
 
         const foundRecord = await dependencies.databasePrisma.choice.findFirst({
-            where: { id: id }
+            where: { id: { in: id } }
         });
 
         if (!foundRecord) {
-            throw dependencies.exceptionHandling.throwError("record with " + id + " id does not exist", 404);
+            throw dependencies.exceptionHandling.throwError("record with " + id.join(", ") + " id does not exist", 404);
         }
 
-        const result = await dependencies.databasePrisma.choice.delete({
+        const result = await dependencies.databasePrisma.choice.deleteMany({
             where: { id: { in: id } }
         });
 
