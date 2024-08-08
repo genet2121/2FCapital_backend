@@ -11,7 +11,19 @@ module.exports = async function (reqUser, authorization, id, dependencies, smsSe
             throw dependencies.exceptionHandling.throwError("No base questionary exist with the given id", 404);
         }
 
+        class basequesionary {
+            created_by;
+            constructor(creator){
+                this.created_by = creator;
+            }
+        };
+
+        if(!authorization.can("read", basequesionary(foundRecord.created_by))) {
+            throw dependencies.exceptionHandling.throwError("you are not allowed to read the record", 403);
+        }
+
         return foundRecord;
+
 
     } catch (error) {
         console.log(error);

@@ -10,10 +10,23 @@ module.exports = async function (reqUser, authorization, data, dependencies, sms
         let validated = ZodValidation( BookUploadValidator.create, data, dependencies);
         if (validated) {
 
+            let selected_questionaries = await dependencies.databasePrisma.basequestionary.findMany({
+                where: {id: { in: data.questionaries }},
+                select: {
+                    question: true,
+                    name: true,
+                    type: true
+                }
+            });
+
             const recordData = FieldsMapper.mapFields(data, "bookupload");
 
             let resultData = await dependencies.databasePrisma.bookupload.create({
                 data: recordData
+            });
+
+            await dependencies.databasePrisma.questionary.crateMany({
+                data: selected_questionaries.map(sq => ({ ...sq, upload_id: resultData.id }))
             });
 
             // await this.smsService.sendSMS(user.Phone, `Dear ${user.FullName} user your phone number to sign in to your account and the account password is ${password}. Thank you for working with us!`);

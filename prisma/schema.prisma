@@ -50,6 +50,7 @@ model bookupload {
   price              Float
   status             Boolean
   owner_id           Int
+  book_cover         Int
 
   owner              user             @relation(fields: [owner_id], references: [id])
   book               book             @relation(fields: [book_id], references: [id])

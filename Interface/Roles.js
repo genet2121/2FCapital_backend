@@ -3,3 +3,5 @@ const Roles = {
     Owner: "owner",
     User: "user"
 }
+
+module.exports = Roles;
