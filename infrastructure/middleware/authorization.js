@@ -1,3 +1,5 @@
+import Roles from "../../Interface/Roles";
+
 const {Ability, AbilityBuilder} = require("@casl/ability");
 
 
