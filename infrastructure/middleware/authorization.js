@@ -50,8 +50,8 @@ export default function(user) {
     } else if(user.Roles.includes(Roles.Owner)) {
 
         builder.cannot("create", "user");
-        builder.can("read", "user", { id: user.Id });
-        builder.can("update", "user", { id: user.Id });
+        builder.can("read", "user");
+        builder.can("update", "user");
         builder.cannot("delete", "user");
         
         builder.cannot("create", "choice");
@@ -59,20 +59,20 @@ export default function(user) {
         builder.cannot("update", "choice");
         builder.cannot("delete", "choice");
         
-        builder.can("create", "book", { owner_id: user.Id });
-        builder.can("read", "book", { owner_id: user.Id });
-        builder.can("update", "book", { owner_id: user.Id });
-        builder.can("delete", "book", { owner_id: user.Id });
+        builder.can("create", "book");
+        builder.can("read", "book");
+        builder.can("update", "book");
+        builder.can("delete", "book");
         
-        builder.can("create", "bookupload", { owner_id: user.Id });
-        builder.can("read", "bookupload", { owner_id: user.Id });
-        builder.can("update", "bookupload", { owner_id: user.Id });
-        builder.can("delete", "bookupload", { owner_id: user.Id });
+        builder.can("create", "bookupload");
+        builder.can("read", "bookupload");
+        builder.can("update", "bookupload");
+        builder.can("delete", "bookupload");
         
-        builder.can("create", "basequesionary", { created_by: user.Id });
-        builder.can("read", "basequesionary", { created_by: user.Id });
-        builder.can("update", "basequesionary", { created_by: user.Id });
-        builder.can("delete", "basequesionary", { created_by: user.Id });
+        builder.can("create", "basequesionary");
+        builder.can("read", "basequesionary");
+        builder.can("update", "basequesionary");
+        builder.can("delete", "basequesionary");
 
         builder.can("read", "quesionary");
 
@@ -83,7 +83,7 @@ export default function(user) {
         
         // builder.can("create", "rent");
         builder.can("read", "rent");
-        builder.can("update", "rent", ["status"], { owner_id: user.Id });
+        builder.can("update", "rent", ["status"]);
         // builder.can("delete", "rent");
 
     }  else {
