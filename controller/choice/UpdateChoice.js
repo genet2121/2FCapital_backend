@@ -2,7 +2,7 @@ const FieldsMapper = require("../../infrastructure/FieldMapper");
 const ZodValidation = require("../../infrastructure/service/validation/zodValidation");
 const ChoiceValidator = require("./ChoiceValidator");
 
-module.exports = async function (reqUser, input, dependencies, smsService) {
+module.exports = async function (reqUser, authorization, input, dependencies, smsService) {
 
     try {
 

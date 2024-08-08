@@ -2,7 +2,7 @@ const FieldsMapper = require("../../infrastructure/FieldMapper");
 const ZodValidation = require("../../infrastructure/service/validation/zodValidation");
 const BookValidator = require("./BookValidator");
 
-module.exports = async function (reqUser, data, dependencies, smsService) {
+module.exports = async function (reqUser, authorization, data, dependencies, smsService) {
     try {
 
         // let validated = await dependencies.routingValidator.validateRecord("user", data);

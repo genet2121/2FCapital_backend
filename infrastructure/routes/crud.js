@@ -39,7 +39,7 @@ module.exports = class Crud {
                     throw this.dependencies.exceptionHandling.throwError("table not found", 404);
                 }
 
-                let record = await controllers[tableName].create(req.user, data, this.dependencies, this.smsService);
+                let record = await controllers[tableName].create(req.user, req.userAuthorization, data, this.dependencies, this.smsService);
 
                 return res.status(200).json(record);
 
@@ -74,7 +74,7 @@ module.exports = class Crud {
                     throw this.dependencies.exceptionHandling.throwError("table not found", 404);
                 }
 
-                let record = await controllers[tableName].get(req.user, data, this.dependencies, this.smsService, type);
+                let record = await controllers[tableName].get(req.user, req.userAuthorization, data, this.dependencies, this.smsService, type);
 
                 if(!record){
                     throw this.dependencies.exceptionHandling.throwError("record not found", 404);
@@ -116,7 +116,7 @@ module.exports = class Crud {
 
                 }
 
-                let { whereQuery, include } = await controllers[req.params.tableName].getList(req.user, req.body.condition, this.dependencies, this.smsService, type);
+                let { whereQuery, include } = await controllers[req.params.tableName].getList(req.user, req.userAuthorization, req.body.condition, this.dependencies, this.smsService, type);
 
                 const totalCount = await this.dependencies.databasePrisma[req.params.tableName].findMany({
                     where: whereQuery,
@@ -170,7 +170,7 @@ module.exports = class Crud {
                     throw this.dependencies.exceptionHandling.throwError("request body must at least have an Id", 400);
                 }
 
-                let record = await controllers[tableName].update(req.user, data, this.dependencies, this.smsService);
+                let record = await controllers[tableName].update(req.user, req.userAuthorization, data, this.dependencies, this.smsService);
 
                 return res.status(200).json(record);
 
@@ -201,7 +201,7 @@ module.exports = class Crud {
                     throw this.dependencies.exceptionHandling.throwError("data object must contain 'newPassword' property", 400);
                 }
 
-                let record = await ChangePassword(req.user, parseInt(id), oldPassword, newPassword, this.dependencies);
+                let record = await ChangePassword(req.user, req.userAuthorization, parseInt(id), oldPassword, newPassword, this.dependencies);
                 return res.status(200).json(record);
 
             } catch (error) {
@@ -233,7 +233,7 @@ module.exports = class Crud {
                     throw this.dependencies.exceptionHandling.throwError("table not found", 404);
                 }
 
-                let record = await controllers[tableName].delete(req.user, (Array.isArray(id) ? id : [id]), this.dependencies, this.smsService);
+                let record = await controllers[tableName].delete(req.user, req.userAuthorization, (Array.isArray(id) ? id : [id]), this.dependencies, this.smsService);
 
                 return res.status(200).json({
                     status: 200,

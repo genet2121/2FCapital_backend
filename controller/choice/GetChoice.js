@@ -1,4 +1,4 @@
-module.exports = async function (reqUser, id, dependencies, smsService, type) {
+module.exports = async function (reqUser, authorization, id, dependencies, smsService, type) {
     try {
 
         const user = await dependencies.databasePrisma.choice.findUnique({

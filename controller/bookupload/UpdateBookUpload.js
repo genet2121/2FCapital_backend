@@ -1,16 +1,16 @@
 const FieldsMapper = require("../../infrastructure/FieldMapper");
 const ZodValidation = require("../../infrastructure/service/validation/zodValidation");
-const BookValidator = require("./BookValidator");
+const BookUploadValidator = require("./bookUploadValidator");
 
 module.exports = async function (reqUser, authorization, input, dependencies, smsService) {
 
     try {
 
-        // let validated = await dependencies.routingValidator.validatOnUpdateRecord("book", input);
-        let validated = ZodValidation(BookValidator.create, input, dependencies);
+        // let validated = await dependencies.routingValidator.validatOnUpdateRecord("choice", input);
+        let validated = ZodValidation(BookUploadValidator.create, input, dependencies);
         if (validated) {
 
-            const foundRecord = await dependencies.databasePrisma.book.findFirst({
+            const foundRecord = await dependencies.databasePrisma.bookupload.findFirst({
                 where: {
                     id: input.id
                 }
@@ -20,8 +20,8 @@ module.exports = async function (reqUser, authorization, input, dependencies, sm
                 throw dependencies.exceptionHandling.throwError("record not found.", 404);
             }
 
-            const recordData = FieldsMapper.mapFields(input, "book");
-            return await dependencies.databasePrisma.book.update({
+            const recordData = FieldsMapper.mapFields(input, "basequestionary");
+            return await dependencies.databasePrisma.bookupload.update({
                 where: {
                     id: input.id
                 },

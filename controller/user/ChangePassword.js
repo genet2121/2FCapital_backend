@@ -1,4 +1,4 @@
-module.exports = async function (reqUser, id, oldPassword, newPassword, dependencies) {
+module.exports = async function (reqUser, authorization, id, oldPassword, newPassword, dependencies) {
 
     try {
 
@@ -12,7 +12,15 @@ module.exports = async function (reqUser, id, oldPassword, newPassword, dependen
             throw dependencies.exceptionHandling.throwError("User Not Found", 404);
         }
 
-        if(!reqUser || reqUser.Roles.includes("admin") || user.id == reqUser.Id){
+        class User {
+            id;
+            constructor(Id) {
+                this.id = Id;
+            }
+        };
+
+        // if(!reqUser || reqUser.Roles.includes("admin") || user.id == reqUser.Id){
+        if(authorization.can("update", new User(id))) {
 
             if (!await dependencies.encryption.compare(oldPassword, user.password)) {
                 throw dependencies.exceptionHandling.throwError("Incorrect old password", 401); 

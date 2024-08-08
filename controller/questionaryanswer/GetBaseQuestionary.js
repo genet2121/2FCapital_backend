@@ -1,16 +1,18 @@
 module.exports = async function (reqUser, authorization, id, dependencies, smsService, type) {
     try {
 
-        const user = await dependencies.databasePrisma.user.findUnique({
+        const foundRecord = await dependencies.databasePrisma.basequestionary.findUnique({
             where: {
                 id: Number(id)
             }
-        })
+        });
 
-        if (!user) {
-            throw dependencies.exceptionHandling.throwError("No user exist with the given id", 404);
+        if (!foundRecord) {
+            throw dependencies.exceptionHandling.throwError("No base questionary exist with the given id", 404);
         }
-        return user;
+
+        return foundRecord;
+
     } catch (error) {
         console.log(error);
         if(error.statusCode){

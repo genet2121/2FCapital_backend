@@ -1,24 +1,24 @@
 const FieldsMapper = require("../../infrastructure/FieldMapper");
 const ZodValidation = require("../../infrastructure/service/validation/zodValidation");
-const ChoiceValidator = require("./ChoiceValidator");
+const RentValidator = require("./rentValidator");
 
 module.exports = async function (reqUser, authorization, data, dependencies, smsService) {
 
     try {
 
         // let validated = await dependencies.routingValidator.validateRecord("user", data);
-        let validated = ZodValidation( ChoiceValidator.create, data, dependencies);
+        let validated = ZodValidation( RentValidator.create, data, dependencies);
         if (validated) {
 
-            const choiceData = FieldsMapper.mapFields(data, "choice");
+            const recordData = FieldsMapper.mapFields(data, "rent");
 
-            let choice = await dependencies.databasePrisma.choice.create({
-                data: choiceData
+            let resultData = await dependencies.databasePrisma.rent.create({
+                data: recordData
             });
 
             // await this.smsService.sendSMS(user.Phone, `Dear ${user.FullName} user your phone number to sign in to your account and the account password is ${password}. Thank you for working with us!`);
 
-            return choice;
+            return resultData;
 
         }
 

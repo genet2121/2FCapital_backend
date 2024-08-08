@@ -4,6 +4,7 @@
   "description": "",
   "main": "server.js",
   "dependencies": {
+    "@casl/ability": "^6.7.1",
     "@prisma/client": "^5.11.0",
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",

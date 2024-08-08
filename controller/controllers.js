@@ -19,6 +19,27 @@ const UpdateChoice = require("./choice/UpdateChoice");
 const DeleteChoice = require("./choice/DeleteChoice");
 const GetChoice = require("./choice/GetChoice");
 const ListChoice = require("./choice/ListChoice");
+const CreateBookUpload = require("./bookupload/CreateBookUpload");
+const UpdateBookUpload = require("./bookupload/UpdateBookUpload");
+const DeleteBookUpload = require("./bookupload/DeleteBookUpload");
+const GetBookUpload = require("./bookupload/GetBookUpload");
+const ListBookUpload = require("./bookupload/ListBookUpload");
+const CreateQuestionary = require("./questionary/CreateQuestionary");
+const UpdateQuestionary = require("./questionary/UpdateQuestionary");
+const GetQuestionary = require("./questionary/GetQuestionary");
+const DeleteQuestionary = require("./questionary/DeleteQuestionary");
+const ListQuestionary = require("./questionary/ListQuestionary");
+const ListQuestionaryAnswer = require("./questionaryanswer/ListQuestionaryAnswer");
+const CreateBaseQuestionary = require("./questionaryanswer/CreateBaseQuestionary");
+const UpdateBaseQuestionary = require("./questionaryanswer/UpdateeBaseQuestionary");
+const DeleteBaseQuestionary = require("./questionaryanswer/DeleteBaseQuestionary");
+const ListBaseQuestionary = require("./questionaryanswer/ListBaseQuestionary");
+const GetBaseQuestionary = require("./questionaryanswer/GetBaseQuestionary");
+const CreateRent = require("./rent/CreateRent");
+const UpdateRent = require("./rent/UpdateRent");
+const DeleteRent = require("./rent/DeleteRent");
+const GetRent = require("./rent/GetRent");
+const ListRent = require("./rent/ListRent");
 
 
 module.exports = function (dependencies) {
@@ -44,6 +65,37 @@ module.exports = function (dependencies) {
             delete: DeleteChoice,
             get: GetChoice,
             getList: ListChoice
+        },
+        bookUpload: {
+            create: CreateBookUpload,
+            update: UpdateBookUpload,
+            delete: DeleteBookUpload,
+            get: GetBookUpload,
+            getList: ListBookUpload
+        },
+        questionary: {
+            create: CreateQuestionary,
+            update: UpdateQuestionary,
+            delete: DeleteQuestionary,
+            get: GetQuestionary,
+            getList: ListQuestionary
+        },
+        questionaryanswer: {
+            getList: ListQuestionaryAnswer
+        },
+        basequestionary: {
+            create: CreateBaseQuestionary,
+            update: UpdateBaseQuestionary,
+            delete: DeleteBaseQuestionary,
+            get: GetBaseQuestionary,
+            getList: ListBaseQuestionary
+        },
+        rent: {
+            create: CreateRent,
+            update: UpdateRent,
+            delete: DeleteRent,
+            get: GetRent,
+            getList: ListRent
         },
         attachment: {
             create: CreateAttachment,

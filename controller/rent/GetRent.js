@@ -1,16 +1,23 @@
 module.exports = async function (reqUser, authorization, id, dependencies, smsService, type) {
     try {
 
-        const user = await dependencies.databasePrisma.user.findUnique({
+        const foundRecord = await dependencies.databasePrisma.rent.findUnique({
             where: {
                 id: Number(id)
+            },
+            include: {
+                owner: true,
+                bookUploads: true,
+                additionalAnswer: true
             }
-        })
+        });
 
-        if (!user) {
-            throw dependencies.exceptionHandling.throwError("No user exist with the given id", 404);
+        if (!foundRecord) {
+            throw dependencies.exceptionHandling.throwError("No rent exist with the given id", 404);
         }
-        return user;
+
+        return foundRecord;
+
     } catch (error) {
         console.log(error);
         if(error.statusCode){

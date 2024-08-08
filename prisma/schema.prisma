@@ -21,6 +21,7 @@ model user {
   rentOwner         rent[]
   ownedbooks        book[]
   bookUploads       bookupload[]
+  questionaries     basequestionary[]
 }
 
 
@@ -56,6 +57,16 @@ model bookupload {
   questionaries      questionary[]
 }
 
+model basequestionary {
+  id                Int               @id @default(autoincrement())
+  question          String
+  name              String
+  type              String
+  created_by        Int
+
+  owner             user              @relation(fields: [created_by], references: [id])
+}
+
 model questionary {
   id                Int               @id @default(autoincrement())
   question          String
@@ -64,17 +75,16 @@ model questionary {
   upload_id         Int
 
   bookUploads       bookupload        @relation(fields: [upload_id], references: [id])
+  answers           questionanswer[]  @relation("answer_question")
 }
 
 model questionanswer {
-  id                Int               @id @default(autoincrement())
-  question          String
-  name              String
-  type              String
+  question_id       Int
   answer            String
   rent_id           Int
 
   rent              rent              @relation("rent_question", fields: [rent_id], references: [id])
+  question          questionary       @relation("answer_question", fields: [rent_id], references: [id])
 }
 
 model rent {

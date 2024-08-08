@@ -2,22 +2,21 @@ module.exports = async function (reqUser, authorization, id, dependencies, smsSe
 
     try {
 
-        const userFound = await dependencies.databasePrisma.user.findFirst({
+        const foundRecord = await dependencies.databasePrisma.questionary.findFirst({
             where: { id: { in: id } }
         });
 
-        if (!userFound.length == 0) {
-            throw dependencies.exceptionHandling.throwError("user with " + id.join(", ") + " id does not exist", 404);
+        if (!foundRecord) {
+            throw dependencies.exceptionHandling.throwError("record with " + id.join(", ") + " id does not exist", 404);
         }
 
-        const user = await dependencies.databasePrisma.user.deleteMany({
+        const result = await dependencies.databasePrisma.questionary.deleteMany({
             where: { id: { in: id } }
         });
 
-        return user;
+        return result;
 
     } catch (error) {
-
         console.log(error);
 
         if(error.statusCode){

@@ -1,4 +1,4 @@
-module.exports = async function (reqUser, id, dependencies, smsService) {
+module.exports = async function (reqUser, authorization, id, dependencies, smsService) {
 
     try {
 
