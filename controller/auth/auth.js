@@ -11,12 +11,12 @@ module.exports = class AuthController {
     }
 
 
-    async login({ phone, password }) {
+    async login({ email, password }) {
         try {
              
             let user = await this.dependencies.databasePrisma.user.findFirst({
                 where: {
-                    phone
+                    email
                 }
             })
 

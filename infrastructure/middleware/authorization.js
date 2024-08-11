@@ -13,27 +13,28 @@ export default function(user) {
         builder.can("read", "user");
         builder.can("update", "user");
         builder.can("delete", "user");
-        
+
         builder.can("create", "choice");
         builder.can("read", "choice");
         builder.can("update", "choice");
         builder.can("delete", "choice");
-        
+
         builder.can("create", "book");
         builder.can("read", "book");
         builder.can("update", "book");
         builder.can("delete", "book");
+
         
         builder.can("create", "bookupload");
         builder.can("read", "bookupload");
         builder.can("update", "bookupload");
         builder.can("delete", "bookupload");
-        
+
         builder.can("create", "basequesionary");
         builder.can("read", "basequesionary");
         builder.can("update", "basequesionary");
         builder.can("delete", "basequesionary");
-        
+
         builder.can("create", "quesionary");
         builder.can("read", "quesionary");
         builder.can("update", "quesionary");

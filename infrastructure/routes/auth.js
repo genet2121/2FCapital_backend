@@ -19,11 +19,11 @@ module.exports = (dependencies) => {
 
         try {
 
-            let {phone, password} =  req.body;
-            if(!phone || !password) {
+            let {email, password} =  req.body;
+            if(!email || !password) {
                 throw dependencies.exceptionHandling.throwError("request Body must have phone and password", 400);
             }
-            const authresult = await authController.login({phone, password});
+            const authresult = await authController.login({email, password});
 
             return res.status(200).json(authresult);
 
