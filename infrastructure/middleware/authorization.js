@@ -89,7 +89,7 @@ export default function(user) {
         builder.can("update", "rent", ["status"]);
         // builder.can("delete", "rent");
 
-    }  else {
+    }  else if(user.Roles.includes(Roles.User)) {
 
         builder.cannot("create", "user");
         builder.can("read", "user", { id: user.Id });
@@ -113,6 +113,8 @@ export default function(user) {
         builder.can("read", "rent");
         builder.can("update", "rent");
 
+    } else {
+        builder.cannot("create", "user");
     }
 
     return builder.build();

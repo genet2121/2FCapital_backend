@@ -5,6 +5,6 @@ module.exports = async function (reqUser, authorization, condition, dependencies
         condition.owner_id = reqUser.Id;
     }
 
-    return {whereQuery: condition, include: { owner: true, book: true, rent: true, questionaries: true }};
+    return {whereQuery: condition, include: { owner: true, book: true, questionaries: true }};
 
 }
