@@ -80,12 +80,13 @@ model questionary {
 }
 
 model questionanswer {
+  id                Int               @id @default(autoincrement())
   question_id       Int
   answer            String
   rent_id           Int
 
   rent              rent              @relation("rent_question", fields: [rent_id], references: [id])
-  question          questionary       @relation("answer_question", fields: [rent_id], references: [id])
+  question          questionary       @relation("answer_question", fields: [question_id], references: [id])
 }
 
 model rent {
@@ -100,6 +101,15 @@ model rent {
   owner             user              @relation(fields: [owner_id], references: [id])
   bookUploads       bookupload        @relation(fields: [upload_id], references: [id])
   additionalAnswer  questionanswer[]  @relation("rent_question")
+}
+
+model attachment {
+  id                Int               @id @default(autoincrement())
+  name              String
+  table             String
+  record            Int
+  file_name         String
+  extension         String
 }
 
 enum ACTIVE {

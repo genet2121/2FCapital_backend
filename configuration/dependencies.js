@@ -32,7 +32,8 @@ module.exports = class Configuration{
         this.exceptionHandling = new ExceptionHandlingService();       
         this.routingValidator = new RoutingValidator({databasePrisma: this.databasePrisma, exceptionHandling: this.exceptionHandling});
         // this.attachmentDirectory = '/var/www/ebidir_uploads';
-        this.attachmentDirectory = path.join(__dirname, './uploads');
+        this.attachmentDirectory = 'C:\\Users\\Public\\file_uploads';
+        // this.attachmentDirectory = path.join(__dirname, './uploads');
 
         this.smsConfiguration = {
             smsToken: "",

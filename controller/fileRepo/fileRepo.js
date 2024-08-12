@@ -40,7 +40,7 @@ module.exports = class attachmentController {
                     data: {
                         name: name,
                         table: table,
-                        record: record,
+                        record: parseInt(record),
                         file_name: customFileName,
                         extension: extension
                     }
