@@ -98,6 +98,98 @@
 			}
 		}
 	},
+	"basequestionary": {
+		"fields": {
+			"type": {
+				"type": "string",
+				"minLength": 3,
+				"required": true
+			},
+			"question": {
+				"type": "string",
+				"minLength": 3,
+				"required": true
+			},
+			"name": {
+				"type": "string",
+				"minValue": 3,
+				"required": true
+			},
+			"created_by": {
+				"type": "string",
+				"minValue": 3,
+				"required": true
+			}
+		}
+	},
+	"bookupload": {
+		"fields": {
+			"quantity": {
+				"type": "string",
+				"minLength": 3,
+				"required": true
+			},
+			"book_id": {
+				"type": "string",
+				"minLength": 3,
+				"required": true
+			},
+			"price": {
+				"type": "string",
+				"minValue": 3,
+				"required": true
+			},
+			"owner_id": {
+				"type": "string",
+				"minValue": 3,
+				"required": true
+			},
+			"book_cover": {
+				"type": "string",
+				"minValue": 3,
+				"required": true
+			},
+			"status": {
+				"type": "string",
+				"minValue": 3,
+				"required": true
+			}
+		}
+	},
+	"rent": {
+		"fields": {
+			"quantity": {
+				"type": "string",
+				"minLength": 3,
+				"required": true
+			},
+			"upload_id": {
+				"type": "string",
+				"minLength": 3,
+				"required": true
+			},
+			"total_price": {
+				"type": "string",
+				"minValue": 3,
+				"required": true
+			},
+			"owner_id": {
+				"type": "string",
+				"minValue": 3,
+				"required": true
+			},
+			"date": {
+				"type": "string",
+				"minValue": 3,
+				"required": true
+			},
+			"status": {
+				"type": "string",
+				"minValue": 3,
+				"required": true
+			}
+		}
+	},
 	"attachment": {
 		"fields": {
 			"name": {

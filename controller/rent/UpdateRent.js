@@ -7,8 +7,29 @@ module.exports = async function (reqUser, authorization, input, dependencies, sm
     try {
 
         // let validated = await dependencies.routingValidator.validatOnUpdateRecord("choice", input);
-        let validated = ZodValidation(RentValdator.create, input, dependencies);
+        let validated = ZodValidation(RentValdator.update, input, dependencies);
         if (validated) {
+
+            const found_book_upload = await dependencies.databasePrisma.bookupload.findFirst({
+                where: {
+                    id: input.upload_id,
+                    owner_id: 4
+                },
+                include: {
+                    questionaries: true
+                }
+            });
+
+            if(!found_book_upload) {
+                throw dependencies.exceptionHandling.throwError("book upload not found", 500);
+            }
+
+            found_book_upload.questionaries.forEach(qnr => {
+                let found_ans = input.answers.find(ans => ans.id == qnr.id);
+                if(!found_ans) {
+                    throw dependencies.exceptionHandling.throwError(`questionary named ${qnr.question} is missing`, 500);
+                }
+            });
 
             const foundRecord = await dependencies.databasePrisma.rent.findFirst({
                 where: {
@@ -21,11 +42,21 @@ module.exports = async function (reqUser, authorization, input, dependencies, sm
             }
 
             const recordData = FieldsMapper.mapFields(input, "rent");
-            return await dependencies.databasePrisma.bookupload.update({
+            recordData.owner_id = 4;
+
+            let resultData = await dependencies.databasePrisma.rent.update({
                 where: {
                     id: input.id
                 },
                 data: recordData,
+            });
+
+            await dependencies.databasePrisma.questionanswer.deleteMany({
+                where: { rent_id: input.id }
+            });
+
+            await dependencies.databasePrisma.questionanswer.createMany({
+                data: input.answers.map(ans => ({question_id: ans.id, answer: ans.answer, rent_id: resultData.id }))
             });
 
         }

@@ -44,11 +44,11 @@ model book {
 }
 
 model bookupload {
-  id                Int               @id @default(autoincrement())
+  id                 Int               @id @default(autoincrement())
   quantity           Int
   book_id            Int
   price              Float
-  status             Boolean
+  status             ACTIVE
   owner_id           Int
   book_cover         Int
 

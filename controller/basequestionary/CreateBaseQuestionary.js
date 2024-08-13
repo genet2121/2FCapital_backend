@@ -11,6 +11,7 @@ module.exports = async function (reqUser, authorization, data, dependencies, sms
         if (validated) {
 
             const recordData = FieldsMapper.mapFields(data, "basequestionary");
+            recordData.created_by = 4;
 
             let resultData = await dependencies.databasePrisma.basequestionary.create({
                 data: recordData

@@ -10,6 +10,30 @@ module.exports = async function (reqUser, authorization, data, dependencies, sms
         let validated = ZodValidation( BookUploadValidator.create, data, dependencies);
         if (validated) {
 
+            let found_book = await dependencies.databasePrisma.bookupload.findFirst({
+                where: {book_id: data.book_id},
+            });
+
+            if(found_book) {
+                found_book.quantity += data.quantity;
+                await dependencies.databasePrisma.bookupload.update({
+                    where: {
+                        id: found_book.id
+                    },
+                    data: found_book
+                });
+
+                return found_book;
+
+            }
+
+            const recordData = FieldsMapper.mapFields(data, "bookupload");
+            recordData.owner_id = 4;
+
+            const resultData = await dependencies.databasePrisma.bookupload.create({
+                data: recordData
+            });
+
             let selected_questionaries = await dependencies.databasePrisma.basequestionary.findMany({
                 where: {id: { in: data.questionaries }},
                 select: {
@@ -19,13 +43,7 @@ module.exports = async function (reqUser, authorization, data, dependencies, sms
                 }
             });
 
-            const recordData = FieldsMapper.mapFields(data, "bookupload");
-
-            let resultData = await dependencies.databasePrisma.bookupload.create({
-                data: recordData
-            });
-
-            await dependencies.databasePrisma.questionary.crateMany({
+            await dependencies.databasePrisma.questionary.createMany({
                 data: selected_questionaries.map(sq => ({ ...sq, upload_id: resultData.id }))
             });
 

@@ -7,11 +7,11 @@ module.exports = async function (reqUser, authorization, input, dependencies, sm
     try {
 
         // let validated = await dependencies.routingValidator.validatOnUpdateRecord("choice", input);
-        let validated = ZodValidation(BookUploadValidator.create, input, dependencies);
+        let validated = ZodValidation(BookUploadValidator.update, input, dependencies);
         if (validated) {
 
             let selected_questionaries = await dependencies.databasePrisma.basequestionary.findMany({
-                where: {id: { in: data.questionaries }},
+                where: {id: { in: input.questionaries }},
                 select: {
                     question: true,
                     name: true,
@@ -29,7 +29,7 @@ module.exports = async function (reqUser, authorization, input, dependencies, sm
                 throw dependencies.exceptionHandling.throwError("record not found.", 404);
             }
 
-            const recordData = FieldsMapper.mapFields(input, "basequestionary");
+            const recordData = FieldsMapper.mapFields(input, "bookupload");
             let resultData = await dependencies.databasePrisma.bookupload.update({
                 where: {
                     id: input.id
@@ -41,7 +41,7 @@ module.exports = async function (reqUser, authorization, input, dependencies, sm
                 where: { upload_id: foundRecord.id }
             });
 
-            await dependencies.databasePrisma.questionary.crateMany({
+            await dependencies.databasePrisma.questionary.createMany({
                 data: selected_questionaries.map(sq => ({ ...sq, upload_id: foundRecord.id }))
             });
 

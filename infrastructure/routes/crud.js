@@ -74,9 +74,9 @@ module.exports = class Crud {
                     throw this.dependencies.exceptionHandling.throwError("table not found", 404);
                 }
 
-                let record = await controllers[tableName].get(req.user, req.userAuthorization, data, this.dependencies, this.smsService, type);
+                let record = await controllers[req.params.table].get(req.user, req.userAuthorization, req.params.id, this.dependencies, this.smsService, type);
 
-                if(!record){
+                if(!record) {
                     throw this.dependencies.exceptionHandling.throwError("record not found", 404);
                 }
 

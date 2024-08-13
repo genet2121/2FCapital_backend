@@ -66,7 +66,7 @@ module.exports = function (dependencies) {
             get: GetChoice,
             getList: ListChoice
         },
-        bookUpload: {
+        bookupload: {
             create: CreateBookUpload,
             update: UpdateBookUpload,
             delete: DeleteBookUpload,

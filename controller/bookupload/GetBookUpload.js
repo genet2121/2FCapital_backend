@@ -3,7 +3,12 @@ module.exports = async function (reqUser, authorization, id, dependencies, smsSe
 
         const foundRecord = await dependencies.databasePrisma.bookupload.findUnique({
             where: {
-                id: Number(id)
+                id: parseInt(id)
+            }, 
+            include: {
+                questionaries: true,
+                book: true,
+                owner: true
             }
         });
 

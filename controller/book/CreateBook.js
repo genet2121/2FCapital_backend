@@ -10,6 +10,7 @@ module.exports = async function (reqUser, authorization, data, dependencies, sms
         if (validated) {
 
             const bookData = FieldsMapper.mapFields(data, "book");
+            bookData.owner_id = 4;
 
             let book = await dependencies.databasePrisma.book.create({
                 data: bookData

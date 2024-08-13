@@ -1,19 +1,23 @@
-
 const { z } = require('zod');
+const Active = ["true", "false"];
 
 module.exports = {
     create: z.object({
-        type: z.string().min(3, { message: "type should at least be 3 character long" }).max(30, { message: "type should maximum be 30 characters long" }),
-        question: z.string().min(3, { message: "label should at least be 3 characters long" }).max(50, { message: "label should maximum be 50 characters long" }),
-        name: z.string().min(1, { message: "value should at least be 1 characters long" }).max(50, { message: "value should maximum be 30 characters long" }),
-        created_by: z.number().nonnegative().gt(0, { message: "id must be greater than 0!" }),
+        status: z.enum(Active),
+        quantity: z.number().nonnegative().gt(0, { message: "id must be greater than 0!" }),
+        price: z.number().nonnegative().gt(0, { message: "id must be greater than 0!" }),
+        book_id: z.number().nonnegative().gt(0, { message: "id must be greater than 0!" }),
+        book_cover: z.number().nonnegative().gt(0, { message: "id must be greater than 0!" }),
         questionaries: z.array(z.number().nonnegative().gt(0, { message: "id must be greater than 0!" }))
     }),
     update: z.object({
-        id: z.number().nonnegative().gt(0, { message: "id must be greater than 0!" }).optional(),
-        type: z.string().min(3, { message: "type should at least be 3 character long" }).max(30, { message: "type should maximum be 30 characters long" }),
-        question: z.string().min(3, { message: "label should at least be 3 characters long" }).max(50, { message: "label should maximum be 50 characters long" }),
-        name: z.string().min(1, { message: "value should at least be 1 characters long" }).max(50, { message: "value should maximum be 30 characters long" }),
-        created_by: z.number().nonnegative().gt(0, { message: "id must be greater than 0!" })
+        id: z.number().nonnegative().gt(0, { message: "id must be greater than 0!" }),
+        status: z.enum(Active),
+        quantity: z.number().nonnegative().gt(0, { message: "id must be greater than 0!" }),
+        price: z.number().nonnegative().gt(0, { message: "id must be greater than 0!" }),
+        book_id: z.number().nonnegative().gt(0, { message: "id must be greater than 0!" }),
+        book_cover: z.number().nonnegative().gt(0, { message: "id must be greater than 0!" }),
+        questionaries: z.array(z.number().nonnegative().gt(0, { message: "id must be greater than 0!" })),
+        owner_id: z.number().nonnegative().gt(0, { message: "id must be greater than 0!" })
     })
 }
