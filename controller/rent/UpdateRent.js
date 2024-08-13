@@ -42,6 +42,7 @@ module.exports = async function (reqUser, authorization, input, dependencies, sm
             }
 
             const recordData = FieldsMapper.mapFields(input, "rent");
+            const changes = FieldsMapper.identifyChanges(foundRecord, recordData);
             recordData.owner_id = 4;
 
             let resultData = await dependencies.databasePrisma.rent.update({
@@ -58,6 +59,15 @@ module.exports = async function (reqUser, authorization, input, dependencies, sm
             await dependencies.databasePrisma.questionanswer.createMany({
                 data: input.answers.map(ans => ({question_id: ans.id, answer: ans.answer, rent_id: resultData.id }))
             });
+
+            if(recordData.status == "returned" && changes.filter(cng => (cng.column == "status")).length > 0) {
+                await dependencies.databasePrisma.bookupload.update({
+                    where: {id: found_book_upload.id},
+                    data: {
+                        quantity: found_book_upload.quantity + data.quantity
+                    }
+                });
+            }
 
         }
 

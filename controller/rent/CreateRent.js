@@ -23,6 +23,10 @@ module.exports = async function (reqUser, authorization, data, dependencies, sms
             if(!found_book_upload) {
                 throw dependencies.exceptionHandling.throwError("book upload not found", 500);
             }
+            
+            if(found_book_upload.quantity < data.quantity) {
+                throw dependencies.exceptionHandling.throwError("there is no ehough book copies to rent!", 500);
+            }
 
             found_book_upload.questionaries.forEach(qnr => {
                 let found_ans = data.answers.find(ans => ans.id == qnr.id);
@@ -41,6 +45,13 @@ module.exports = async function (reqUser, authorization, data, dependencies, sms
 
             await dependencies.databasePrisma.questionanswer.createMany({
                 data: data.answers.map(ans => ({question_id: ans.id, answer: ans.answer, rent_id: resultData.id }))
+            });
+
+            await dependencies.databasePrisma.bookupload.update({
+                where: {id: found_book_upload.id},
+                data: {
+                    quantity: found_book_upload.quantity - data.quantity
+                }
             });
 
             // await this.smsService.sendSMS(user.Phone, `Dear ${user.FullName} user your phone number to sign in to your account and the account password is ${password}. Thank you for working with us!`);
