@@ -1,6 +1,7 @@
 const FieldsMapper = require("../../infrastructure/FieldMapper");
 const ZodValidation = require("../../infrastructure/service/validation/zodValidation");
 const BookValidator = require("./BookValidator");
+const Roles = require("../../Interface/Roles");
 
 module.exports = async function (reqUser, authorization, data, dependencies, smsService) {
     try {

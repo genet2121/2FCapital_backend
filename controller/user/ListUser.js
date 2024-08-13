@@ -1,3 +1,4 @@
+const Roles = require("../../Interface/Roles");
 
 module.exports = async function (reqUser, authorization, condition, dependencies, smsService, type) {
 
