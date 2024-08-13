@@ -48,7 +48,7 @@ model bookupload {
   quantity           Int
   book_id            Int
   price              Float
-  status             ACTIVE
+  status             ACTIVE             @default(false)
   owner_id           Int
   book_cover         Int
 

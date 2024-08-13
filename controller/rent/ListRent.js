@@ -3,7 +3,11 @@ module.exports = async function (reqUser, authorization, condition, dependencies
 
     return {whereQuery: condition, include: {
         owner: true,
-        bookUploads: true,
+        bookUploads: {
+            include: {
+                book: true
+            }
+        },
         additionalAnswer: true
     }};
 

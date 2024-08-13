@@ -43,6 +43,10 @@ module.exports = async function (reqUser, authorization, input, dependencies, sm
 
             const recordData = FieldsMapper.mapFields(input, "rent");
             const changes = FieldsMapper.identifyChanges(foundRecord, recordData);
+
+            console.log("old changes ", foundRecord);
+            console.log("current changes ", recordData);
+            console.log("found changes ", changes);
             recordData.owner_id = 4;
 
             let resultData = await dependencies.databasePrisma.rent.update({
@@ -64,7 +68,7 @@ module.exports = async function (reqUser, authorization, input, dependencies, sm
                 await dependencies.databasePrisma.bookupload.update({
                     where: {id: found_book_upload.id},
                     data: {
-                        quantity: found_book_upload.quantity + data.quantity
+                        quantity: found_book_upload.quantity + input.quantity
                     }
                 });
             }

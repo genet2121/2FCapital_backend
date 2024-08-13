@@ -18,6 +18,6 @@ module.exports = {
         book_id: z.number().nonnegative().gt(0, { message: "id must be greater than 0!" }),
         book_cover: z.number().nonnegative().gt(0, { message: "id must be greater than 0!" }),
         questionaries: z.array(z.number().nonnegative().gt(0, { message: "id must be greater than 0!" })),
-        owner_id: z.number().nonnegative().gt(0, { message: "id must be greater than 0!" })
+        // owner_id: z.number().nonnegative().gt(0, { message: "id must be greater than 0!" })
     })
 }
