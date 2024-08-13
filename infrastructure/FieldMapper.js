@@ -23,7 +23,7 @@ class FieldsMapper {
         let changes = [];
 
         fields.forEach(element => {
-            if(!old_data[element] || !new_data[element] && old_data[element] != new_data[element]) {
+            if(!old_data[element] || !new_data[element] || old_data[element] != new_data[element]) {
                 changes.push({
                     column: element,
                     new_value: new_data[element],

@@ -68,7 +68,7 @@ module.exports = async function (reqUser, authorization, input, dependencies, sm
                 await dependencies.databasePrisma.bookupload.update({
                     where: {id: found_book_upload.id},
                     data: {
-                        quantity: found_book_upload.quantity + data.quantity
+                        quantity: found_book_upload.quantity + input.quantity
                     }
                 });
             }
