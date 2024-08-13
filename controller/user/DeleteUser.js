@@ -2,6 +2,10 @@ module.exports = async function (reqUser, authorization, id, dependencies, smsSe
 
     try {
 
+        if(!authorization.can("delete", "user")) {
+            throw dependencies.exceptionHandling.throwError("Unauthorized user", 500);
+        }
+
         const userFound = await dependencies.databasePrisma.user.findFirst({
             where: { id: { in: id } }
         });

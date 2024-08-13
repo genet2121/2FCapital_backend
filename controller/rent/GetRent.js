@@ -1,10 +1,17 @@
 module.exports = async function (reqUser, authorization, id, dependencies, smsService, type) {
     try {
 
+        if(!authorization.can("read", "rent")) {
+            throw dependencies.exceptionHandling.throwError("Unauthorized user", 500);
+        }
+
+        let condition = { id: Number(id) }
+        if(!reqUser.Roles.includes(Roles.Admin)) {
+            condition.owner_id = reqUser.Id;
+        }
+
         const foundRecord = await dependencies.databasePrisma.rent.findUnique({
-            where: {
-                id: Number(id)
-            },
+            where: condition,
             include: {
                 owner: true,
                 bookUploads: true,

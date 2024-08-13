@@ -5,34 +5,15 @@ const UserValidator = require("./UserValidator");
 module.exports = async function (reqUser, authorization, data, dependencies, smsService) {
     try {
 
-        let validated = ZodValidation(UserValidator.create, data, dependencies);
+        if(!authorization.can("create", "user")) {
+            throw dependencies.exceptionHandling.throwError("Unauthorized user", 500);
+        }
+
         // let validated = await dependencies.routingValidator.validateRecord("user", data);
-        // if (validated) {
+        let validated = ZodValidation(UserValidator.create, data, dependencies);
+        if (validated) {
 
-            
-            // const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
-            // const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            // const numberChars = '0123456789';
-            // const specialChars = '!@#$%^&*()-_=+[{]}|;:,<.>/?';
-        
-            // const allChars = lowercaseChars + uppercaseChars + numberChars + specialChars;
-        
-            // // let password = 'password';
-            // let password = '';
-            // password += lowercaseChars.charAt(Math.floor(Math.random() * lowercaseChars.length));
-            // password += uppercaseChars.charAt(Math.floor(Math.random() * uppercaseChars.length));
-            // password += numberChars.charAt(Math.floor(Math.random() * numberChars.length));
-            // password += specialChars.charAt(Math.floor(Math.random() * specialChars.length));
-
-            // for (let i = 0; i < 4; i++) {
-            //     password += allChars.charAt(Math.floor(Math.random() * allChars.length));
-            // }
-        
-
-            // password = password.split('').sort(() => Math.random() - 0.5).join('');
-            if(!data.Approved) {
-                data.Approved = "false";
-            }
+            data.Approved = "false";
 
             if(!data.Status) {
                 data.Status = "false";
@@ -42,16 +23,19 @@ module.exports = async function (reqUser, authorization, data, dependencies, sms
             // const userData = new UserEntity(data);
             const userData = FieldsMapper.mapFields(data, "user");
 
+            if(reqUser.Id == 0) {
+                userData.Status = "false",
+                userData.type = "owner"
+            }
+
             let user = await dependencies.databasePrisma.user.create({
                 data: userData
             });
 
-            // user.Password = password;
-
             // await this.smsService.sendSMS(user.Phone, `Dear ${user.FullName} user your phone number to sign in to your account and the account password is ${password}. Thank you for working with us!`);
 
             return user;
-        // }
+        }
 
     }
     catch (error) {

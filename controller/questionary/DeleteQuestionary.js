@@ -2,6 +2,10 @@ module.exports = async function (reqUser, authorization, id, dependencies, smsSe
 
     try {
 
+        if(!authorization.can("delete", "questionary")) {
+            throw dependencies.exceptionHandling.throwError("Unauthorized user", 500);
+        }
+
         const foundRecord = await dependencies.databasePrisma.questionary.findFirst({
             where: { id: { in: id } }
         });
@@ -11,7 +15,7 @@ module.exports = async function (reqUser, authorization, id, dependencies, smsSe
         }
 
         const result = await dependencies.databasePrisma.questionary.deleteMany({
-            where: { id: { in: id } }
+            where: condition
         });
 
         return result;

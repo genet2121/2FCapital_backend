@@ -5,12 +5,16 @@ const BookValidator = require("./BookValidator");
 module.exports = async function (reqUser, authorization, data, dependencies, smsService) {
     try {
 
+        if(!authorization.can("read", "book")) {
+            throw dependencies.exceptionHandling.throwError("Unauthorized user", 500);
+        }
+
         // let validated = await dependencies.routingValidator.validateRecord("user", data);
         let validated = ZodValidation(BookValidator.create, data, dependencies);
         if (validated) {
 
             const bookData = FieldsMapper.mapFields(data, "book");
-            bookData.owner_id = 4;
+            bookData.owner_id = reqUser.Id;
 
             let book = await dependencies.databasePrisma.book.create({
                 data: bookData

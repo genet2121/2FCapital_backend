@@ -7,11 +7,15 @@ module.exports = async function (reqUser, authorization, data, dependencies, sms
     try {
 
         // let validated = await dependencies.routingValidator.validateRecord("user", data);
+        if(!authorization.can("create", "basequestionary")) {
+            throw dependencies.exceptionHandling.throwError("Unauthorized user", 500);
+        }
+
         let validated = ZodValidation( BaseQuestionaryValidator.create, data, dependencies);
         if (validated) {
 
             const recordData = FieldsMapper.mapFields(data, "basequestionary");
-            recordData.created_by = 4;
+            recordData.created_by = reqUser.Id;
 
             let resultData = await dependencies.databasePrisma.basequestionary.create({
                 data: recordData

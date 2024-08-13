@@ -3,8 +3,17 @@ module.exports = async function (reqUser, authorization, id, dependencies, smsSe
 
     try {
 
+        if(!authorization.can("delete", "basequestionary")) {
+            throw dependencies.exceptionHandling.throwError("Unauthorized user", 500);
+        }
+
+        let condition = { id: { in: id } };
+        if(!reqUser.Roles.includes(Roles.Admin)) {
+            condition.created_by = reqUser.Id
+        }
+
         const foundRecord = await dependencies.databasePrisma.basequestionary.findFirst({
-            where: { id: { in: id } }
+            where: condition
         });
 
         if (!foundRecord) {
@@ -12,7 +21,7 @@ module.exports = async function (reqUser, authorization, id, dependencies, smsSe
         }
 
         const result = await dependencies.databasePrisma.basequestionary.deleteMany({
-            where: { id: { in: id } }
+            where: condition
         });
 
         return result;

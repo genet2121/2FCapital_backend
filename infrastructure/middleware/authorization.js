@@ -1,9 +1,9 @@
-import Roles from "../../Interface/Roles";
+const Roles = require("../../Interface/Roles");
 
 const {Ability, AbilityBuilder} = require("@casl/ability");
 
 
-export default function(user) {
+module.exports = function(user) {
 
     const builder = new AbilityBuilder(Ability);
 

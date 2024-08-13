@@ -21,7 +21,7 @@ module.exports = class Crud {
 
         const controllers = Controller(this.dependencies);
 
-        this.router.post("/create", async (req, res, next) => {
+        this.router.post("/create", AuthService.authenticate, async (req, res, next) => {
 
             try {
 
@@ -55,7 +55,7 @@ module.exports = class Crud {
 
         });
 
-        this.router.get("/getform/:table/:id", async (req, res, next) => {
+        this.router.get("/getform/:table/:id", AuthService.authenticate, async (req, res, next) => {
 
             const { type } = req.query;
 
@@ -92,7 +92,7 @@ module.exports = class Crud {
             }
         });
 
-        this.router.post("/getlist/:tableName/:PageNumber/:PageSize", async (req, res, next) => {
+        this.router.post("/getlist/:tableName/:PageNumber/:PageSize", AuthService.authenticate, async (req, res, next) => {
 
             try {
 
@@ -149,7 +149,7 @@ module.exports = class Crud {
 
         });
 
-        this.router.put("/update", async (req, res, next) => {
+        this.router.put("/update", AuthService.authenticate, async (req, res, next) => {
 
             try {
 
@@ -185,7 +185,7 @@ module.exports = class Crud {
 
         });
 
-        this.router.put("/changePassword", async (req, res, next) => {
+        this.router.put("/changePassword", AuthService.authenticate, async (req, res, next) => {
 
             try {
 
@@ -217,7 +217,7 @@ module.exports = class Crud {
 
         });
 
-        this.router.post("/delete", async (req, res, next) => {
+        this.router.post("/delete", AuthService.authenticate, async (req, res, next) => {
             try {
 
                 let { tableName, id } = req.body;

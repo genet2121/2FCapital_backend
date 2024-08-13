@@ -1,14 +1,25 @@
 const FieldsMapper = require("../../infrastructure/FieldMapper");
 const ZodValidation = require("../../infrastructure/service/validation/zodValidation");
+const Roles = require("../../Interface/Roles");
 const BookUploadValidator = require("./bookUploadValidator");
 
 module.exports = async function (reqUser, authorization, input, dependencies, smsService) {
 
     try {
 
+        if(!authorization.can("update", "bookupload")) {
+            throw dependencies.exceptionHandling.throwError("Unauthorized user", 500);
+        }
+
         // let validated = await dependencies.routingValidator.validatOnUpdateRecord("choice", input);
         let validated = ZodValidation(BookUploadValidator.update, input, dependencies);
         if (validated) {
+
+            let condition = {id: input.id};
+
+            if(!reqUser.Roles.includes(Roles.Admin)) {
+                condition.owner_id = reqUser.Id;
+            }
 
             let selected_questionaries = await dependencies.databasePrisma.basequestionary.findMany({
                 where: {id: { in: input.questionaries }},
@@ -20,9 +31,7 @@ module.exports = async function (reqUser, authorization, input, dependencies, sm
             });
 
             const foundRecord = await dependencies.databasePrisma.bookupload.findFirst({
-                where: {
-                    id: input.id
-                }
+                where: condition
             });
 
             if(!foundRecord) {

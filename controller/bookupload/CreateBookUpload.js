@@ -6,6 +6,10 @@ module.exports = async function (reqUser, authorization, data, dependencies, sms
 
     try {
 
+        if(!authorization.can("create", "bookupload")) {
+            throw dependencies.exceptionHandling.throwError("Unauthorized user", 500);
+        }
+
         // let validated = await dependencies.routingValidator.validateRecord("user", data);
         let validated = ZodValidation( BookUploadValidator.create, data, dependencies);
         if (validated) {
@@ -28,7 +32,7 @@ module.exports = async function (reqUser, authorization, data, dependencies, sms
             }
 
             const recordData = FieldsMapper.mapFields(data, "bookupload");
-            recordData.owner_id = 4;
+            recordData.owner_id = reqUser.Id;
 
             const resultData = await dependencies.databasePrisma.bookupload.create({
                 data: recordData

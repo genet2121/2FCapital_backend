@@ -3,8 +3,17 @@ module.exports = async function (reqUser, authorization, id, dependencies, smsSe
 
     try {
 
+        if(!authorization.can("delete", "rent")) {
+            throw dependencies.exceptionHandling.throwError("Unauthorized user", 500);
+        }
+
+        let condition = { id: { in: id } }
+        if(!reqUser.Roles.includes(Roles.Admin)) {
+            condition.owner_id = reqUser.Id;
+        }
+
         const foundRecord = await dependencies.databasePrisma.rent.findFirst({
-            where: { id: { in: id } }
+            where: condition
         });
 
         if (!foundRecord) {

@@ -1,6 +1,10 @@
 module.exports = async function (reqUser, authorization, id, dependencies, smsService, type) {
     try {
 
+        if(!authorization.can("get", "choice")) {
+            throw dependencies.exceptionHandling.throwError("Unauthorized user", 500);
+        }
+
         const user = await dependencies.databasePrisma.choice.findUnique({
             where: {
                 id: Number(id)

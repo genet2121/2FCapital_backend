@@ -6,15 +6,21 @@ module.exports = async function (reqUser, authorization, input, dependencies, sm
 
     try {
 
+        if(!authorization.can("update", "rent")) {
+            throw dependencies.exceptionHandling.throwError("Unauthorized user", 500);
+        }
+
+        let condition_record = {id: input.id};
+        if(!reqUser.Roles.includes(Roles.Admin)) {
+            condition_record.owner_id = reqUser.Id;
+        }
+
         // let validated = await dependencies.routingValidator.validatOnUpdateRecord("choice", input);
         let validated = ZodValidation(RentValdator.update, input, dependencies);
         if (validated) {
 
             const found_book_upload = await dependencies.databasePrisma.bookupload.findFirst({
-                where: {
-                    id: input.upload_id,
-                    owner_id: 4
-                },
+                where: {id: input.upload_id},
                 include: {
                     questionaries: true
                 }
@@ -32,9 +38,7 @@ module.exports = async function (reqUser, authorization, input, dependencies, sm
             });
 
             const foundRecord = await dependencies.databasePrisma.rent.findFirst({
-                where: {
-                    id: input.id
-                }
+                where: condition_record
             });
 
             if(!foundRecord) {
@@ -43,7 +47,7 @@ module.exports = async function (reqUser, authorization, input, dependencies, sm
 
             const recordData = FieldsMapper.mapFields(input, "rent");
             const changes = FieldsMapper.identifyChanges(foundRecord, recordData);
-            recordData.owner_id = 4;
+            recordData.owner_id = reqUser.Id;
 
             let resultData = await dependencies.databasePrisma.rent.update({
                 where: {

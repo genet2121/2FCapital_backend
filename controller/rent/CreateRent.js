@@ -6,6 +6,10 @@ module.exports = async function (reqUser, authorization, data, dependencies, sms
 
     try {
 
+        if(!authorization.can("create", "rent")) {
+            throw dependencies.exceptionHandling.throwError("Unauthorized user", 500);
+        }
+
         // let validated = await dependencies.routingValidator.validateRecord("user", data);
         let validated = ZodValidation( RentValidator.create, data, dependencies);
         if (validated) {
@@ -13,7 +17,7 @@ module.exports = async function (reqUser, authorization, data, dependencies, sms
             const found_book_upload = await dependencies.databasePrisma.bookupload.findFirst({
                 where: {
                     id: data.upload_id,
-                    owner_id: 4
+                    owner_id: reqUser.Id
                 },
                 include: {
                     questionaries: true
@@ -37,7 +41,7 @@ module.exports = async function (reqUser, authorization, data, dependencies, sms
 
             const recordData = FieldsMapper.mapFields(data, "rent");
             recordData.date = new Date().toISOString();
-            recordData.owner_id = 4;
+            recordData.owner_id = reqUser.Id;
 
             let resultData = await dependencies.databasePrisma.rent.create({
                 data: recordData

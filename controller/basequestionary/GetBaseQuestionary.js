@@ -1,10 +1,17 @@
 module.exports = async function (reqUser, authorization, id, dependencies, smsService, type) {
     try {
 
+        if(!authorization.can("read", "basequestionary")) {
+            throw dependencies.exceptionHandling.throwError("Unauthorized user", 500);
+        }
+
+        let condition = { id: parseInt(id) };
+        if(!reqUser.Roles.includes(Roles.Admin)) {
+            condition.created_by = reqUser.Id
+        }
+
         const foundRecord = await dependencies.databasePrisma.basequestionary.findUnique({
-            where: {
-                id: Number(id)
-            }
+            where: condition
         });
 
         if (!foundRecord) {

@@ -6,14 +6,21 @@ module.exports = async function (reqUser, authorization, input, dependencies, sm
 
     try {
 
+        if(!authorization.can("update", "basequestionary")) {
+            throw dependencies.exceptionHandling.throwError("Unauthorized user", 500);
+        }
+
+        let condition = { id: input.id };
+        if(!reqUser.Roles.includes(Roles.Admin)) {
+            condition.created_by = reqUser.Id
+        }
+
         // let validated = await dependencies.routingValidator.validatOnUpdateRecord("choice", input);
         let validated = ZodValidation(BaseQuestionaryValidator.create, input, dependencies);
         if (validated) {
 
             const foundRecord = await dependencies.databasePrisma.basequestionary.findFirst({
-                where: {
-                    id: input.id
-                }
+                where: condition
             });
 
             if(!foundRecord) {

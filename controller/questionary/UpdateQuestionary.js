@@ -6,6 +6,10 @@ module.exports = async function (reqUser, authorization, input, dependencies, sm
 
     try {
 
+        if(!authorization.can("update", "questionary")) {
+            throw dependencies.exceptionHandling.throwError("Unauthorized user", 500);
+        }
+
         // let validated = await dependencies.routingValidator.validatOnUpdateRecord("choice", input);
         let validated = ZodValidation(QuestionaryValidator.create, input, dependencies);
         if (validated) {
