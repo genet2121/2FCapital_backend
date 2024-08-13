@@ -24,11 +24,11 @@ class FieldsMapper {
 
         fields.forEach(element => {
             if(!old_data[element] || !new_data[element] && old_data[element] != new_data[element]) {
-                changes[element] = {
+                changes.push({
                     column: element,
                     new_value: new_data[element],
                     old_value: old_data[element]
-                };
+                });
             }
 
         });
